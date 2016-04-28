@@ -2,24 +2,94 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="300px"
+        android:layout_height="300px"
+        android:background="#000000" />
 
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#000000"
-        android:text="文字"
-        android:textColor="#ffffff"
-        android:textSize="40px" />
+        android:padding="20px"
+        android:text="文字动画"
+        android:textColor="#ffffff" />
 
-    <TextView
-        android:id="@+id/click"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10px"
-        android:text="click"
-        android:textColor="#000000"
-        android:textSize="25px" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10px"
+                android:text="螃蟹搜索"
+                android:textColor="#000000"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10px"
+                android:text="文字渐显"
+                android:textColor="#000000"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10px"
+                android:text="文字跳动"
+                android:textColor="#000000"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10px"
+                android:text="文字翻转"
+                android:textColor="#000000"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10px"
+                android:text="文字正翻页"
+                android:textColor="#000000"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/tv_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10px"
+                android:text="文字负翻页"
+                android:textColor="#000000"
+                android:textSize="40px" />
+            <TextView
+                android:id="@+id/tv_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10px"
+                android:text="ShowActivity"
+                android:textColor="#000000"
+                android:textSize="40px" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

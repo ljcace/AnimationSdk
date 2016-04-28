@@ -1,4 +1,4 @@
-package com.rokid.animationsdk.util;
+package com.rokid.library.util;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
@@ -20,15 +20,15 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import com.rokid.animationsdk.anim.ClockInterpolator;
-import com.rokid.animationsdk.anim.MyRotateAnimation;
-import com.rokid.animationsdk.anim.Rotate3DAnim;
-import com.rokid.animationsdk.anim.Rotate3dAnimation;
-import com.rokid.animationsdk.interfaces.AnimCallbackInterface;
-import com.rokid.animationsdk.interpolator.ElasticInterpolator;
-import com.rokid.animationsdk.R;
+import com.rokid.library.R;
+import com.rokid.library.anim.ClockInterpolator;
+import com.rokid.library.anim.MyRotateAnimation;
+import com.rokid.library.anim.Rotate3DAnim;
+import com.rokid.library.anim.Rotate3dAnimation;
+import com.rokid.library.interfaces.AnimCallbackInterface;
+import com.rokid.library.interpolator.ElasticInterpolator;
+
 
 /**
  * @author daxia
@@ -117,7 +117,7 @@ public class AnimationUtil {
         /**
          * View渐现动画效果
          */
-        public Builder showAnimation(View view, int duration) {
+        public Builder showAnimation(View view) {
             if (view == null || duration < 0) {
                 return null;
             }
@@ -126,17 +126,20 @@ public class AnimationUtil {
             return this;
         }
 
+        public Builder rotateAnimation(float fDgree, float tDgree) {
+            float cX = view.getWidth() / 2.0f;
+            float cY = view.getHeight() / 2.0f;
+            return rotateAnimation(cX, cY, fDgree, tDgree);
+        }
+
         /**
          * ViewY轴动画效果
          */
-        public Builder rotateAnimation() {
+        public Builder rotateAnimation(float cX, float cY, float fDgree, float tDgree) {
             if (view == null || duration < 0) {
                 return null;
             }
-            float cX = view.getWidth() / 2.0f;
-            float cY = view.getHeight() / 2.0f;
-            MyRotateAnimation mRotateAnimation = new MyRotateAnimation(cX, cY, MyRotateAnimation.ROTATE_DECREASE);
-//        mRotateAnimation.setInterpolatedTimeListener(activity);
+            MyRotateAnimation mRotateAnimation = new MyRotateAnimation(cX, cY, fDgree, tDgree);
             animSet.addAnimation(mRotateAnimation);
             return this;
         }
@@ -208,10 +211,10 @@ public class AnimationUtil {
             return this;
         }
 
-        public Builder getAnimRotation(float centerX, float centerY) {
+        public Builder Anim3DRotation() {
             Rotate3DAnim animation_rotation = null;
             animation_rotation =
-                    new Rotate3DAnim(0, -90, centerX, centerY, 0.0f, true);
+                    new Rotate3DAnim(0, -90, view.getWidth() / 2, view.getHeight() / 2, 0.0f, true);
             animSet.addAnimation(animation_rotation);
             return this;
         }
@@ -233,21 +236,14 @@ public class AnimationUtil {
         }
     }
 
-    public void AnimQq(View v) {
+    public ObjectAnimator AnimQq(View v, long duration) {
         v.setPivotX(05f);
         v.setPivotY(0f);
         ObjectAnimator moveIn = ObjectAnimator.ofFloat(v, "rotationX", -90f, 0f);  //ofFloat(tv, "rotateX", -90f, 0f);
 
-        moveIn.setDuration(3000);
+        moveIn.setDuration(duration);
         moveIn.setInterpolator(new ClockInterpolator(4, 0.6f));
-        moveIn.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                Float a = (Float) animation.getAnimatedValue();
-//                Log.e("a", a + "");
-            }
-        });
-        moveIn.start();
+        return moveIn;
     }
 
     public static AnimationDrawable searchAnimation(ImageView view) {
@@ -256,12 +252,15 @@ public class AnimationUtil {
         }
         view.setImageResource(R.drawable.animation_search);
         AnimationDrawable searchAnimation = (AnimationDrawable) view.getDrawable();
-        searchAnimation.start();
         return searchAnimation;
     }
 
-    public static TranslateAnimation textAnimation(View view, int duration) {
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 100, 0);
+    public static AnimationSet textYTransShowAnimation(int duration) {
+        return textYTransShowAnimation(100f, duration);
+    }
+
+    public static AnimationSet textYTransShowAnimation(float fY, int duration) {
+        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, fY, 0);
         translateAnimation.setInterpolator(new BounceInterpolator());
         AlphaAnimation mShowAnimation = new AlphaAnimation(0.0f, 1.0f);
         AnimationSet animSet = new AnimationSet(false);
@@ -269,11 +268,10 @@ public class AnimationUtil {
         animSet.addAnimation(mShowAnimation);
         animSet.setDuration(duration);
         animSet.setFillAfter(true);
-        view.startAnimation(animSet);
-        return translateAnimation;
+        return animSet;
     }
 
-    public static void videoAnimation(TextureView textureView, Activity activity) {
+    public static AnimatorSet videoAnimation(TextureView textureView, Activity activity) {
         Animator animatorAlpha = AnimatorInflater.loadAnimator(activity, R.animator.anim_alpha);
         Animator animatorScaleX = AnimatorInflater.loadAnimator(activity, R.animator.anim_scalex);
         Animator animatorScaleY = AnimatorInflater.loadAnimator(activity, R.animator.anim_scaley);
@@ -283,17 +281,21 @@ public class AnimationUtil {
         animSet.setInterpolator(new AccelerateInterpolator());
         animSet.setTarget(textureView);
         animSet.setDuration(800);
-        animSet.start();
+        return animSet;
     }
 
-    public static void storyNameAnimation(View view, Activity activity) {
+    public static AnimatorSet storyNameAnimation(View view, Activity activity) {
+        return storyNameAnimation(view, activity, 1000);
+    }
+
+    public static AnimatorSet storyNameAnimation(View view, Activity activity, long duration) {
         Animator animatorAlpha = AnimatorInflater.loadAnimator(activity, R.animator.anim_alpha);
         Animator animatorScaleX = AnimatorInflater.loadAnimator(activity, R.animator.anim_story_scalex);
         Animator animatorScaleY = AnimatorInflater.loadAnimator(activity, R.animator.anim_story_scaley);
         AnimatorSet animSet = new AnimatorSet();
         animSet.play(animatorAlpha).with(animatorScaleX).with(animatorScaleY);
         animSet.setTarget(view);
-        animSet.setDuration(1000);
-        animSet.start();
+        animSet.setDuration(duration);
+        return animSet;
     }
 }

@@ -1,4 +1,4 @@
-package com.rokid.animationsdk.anim;
+package com.rokid.library.anim;
 
 import android.graphics.Camera;
 import android.graphics.Matrix;
@@ -10,28 +10,40 @@ import android.view.animation.Transformation;
  * @version Time：2012-6-27 上午07:32:00
  */
 public class MyRotateAnimation extends Animation {
-    /** 值为true时可明确查看动画的旋转方向。 */
+    /**
+     * 值为true时可明确查看动画的旋转方向。
+     */
     public static final boolean DEBUG = false;
-    /** 沿Y轴正方向看，数值减1时动画逆时针旋转。 */
-    public static final boolean ROTATE_DECREASE = true;
-    /** 沿Y轴正方向看，数值减1时动画顺时针旋转。 */
-    public static final boolean ROTATE_INCREASE = false;
-    /** Z轴上最大深度。 */
+    /**
+     * 垂直时是否需要翻转文字
+     */
+    public static final boolean isOver = false;
+    /**
+     * Z轴上最大深度。
+     */
     public static final float DEPTH_Z = 310.0f;
-    /** 动画显示时长。 */
+    /**
+     * 动画显示时长。
+     */
     public static final long DURATION = 800l;
-    /** 图片翻转类型。 */
-    private final boolean type;
+    /**
+     * 图片翻转类型。
+     */
     private final float centerX;
     private final float centerY;
     private Camera camera;
-    /** 用于监听动画进度。当值过半时需更新txtNumber的内容。 */
+    private final float fDgree;
+    private final float tDgree;
+    /**
+     * 用于监听动画进度。当值过半时需更新txtNumber的内容。
+     */
     private InterpolatedTimeListener listener;
 
-    public MyRotateAnimation(float cX, float cY, boolean type) {
+    public MyRotateAnimation(float cX, float cY, float fd, float td) {
         centerX = cX;
         centerY = cY;
-        this.type = type;
+        fDgree = fd;
+        tDgree = td;
         setDuration(DURATION);
     }
 
@@ -50,17 +62,9 @@ public class MyRotateAnimation extends Animation {
         if (listener != null) {
             listener.interpolatedTime(interpolatedTime);
         }
-        float from = 0.0f, to = 0.0f;
-        if (type == ROTATE_DECREASE) {
-            from = 360.0f;
-            to = 270.0f;
-        } else if (type == ROTATE_INCREASE) {
-            from = 360.0f;
-            to = 180.0f;
-        }
-        float degree = from + (to - from) * interpolatedTime;
+        float degree = fDgree + (tDgree - fDgree) * interpolatedTime;
         boolean overHalf = (interpolatedTime > 0.5f);
-        if (overHalf) {
+        if (overHalf && isOver) {
             // 翻转过半的情况下，为保证数字仍为可读的文字而非镜面效果的文字，需翻转180度。
             degree = degree - 180;
         }
@@ -73,7 +77,7 @@ public class MyRotateAnimation extends Animation {
         camera.getMatrix(matrix);
         camera.restore();
         if (DEBUG) {
-            if (overHalf) {
+            if (overHalf && isOver) {
                 matrix.preTranslate(-centerX * 2, -centerY);
                 matrix.postTranslate(centerX * 2, centerY);
             }
@@ -84,7 +88,9 @@ public class MyRotateAnimation extends Animation {
         }
     }
 
-    /** 动画进度监听器。*/
+    /**
+     * 动画进度监听器。
+     */
     public interface InterpolatedTimeListener {
         void interpolatedTime(float interpolatedTime);
     }

@@ -1,4 +1,4 @@
-package com.rokid.animationsdk.anim;
+package com.rokid.library.anim;
 
 /**
  * Created by bangyan on 16/4/8.
