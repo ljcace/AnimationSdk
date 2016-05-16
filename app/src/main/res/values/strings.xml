@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AnimationSdk</string>
+
+    <string name="animation1">animation1</string>
 </resources>
